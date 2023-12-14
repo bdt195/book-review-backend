@@ -21,6 +21,9 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/user/profile', [UserController::class, 'getProfile'])->middleware('auth:sanctum');
 
-Route::resources([
-    'author' => AuthorController::class
-]);
+Route::resources(
+    ['author' => AuthorController::class],
+    ['except' => ['create', 'edit']]
+);
+
+Route::get('/author/url_key/{url_key}', [AuthorController::class, 'showByUrlKey'])->name('author.showByUrlKey');
