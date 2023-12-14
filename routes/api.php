@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,6 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/user/profile', [UserController::class, 'getProfile'])->middleware('auth:sanctum');
 
+Route::resources([
+    'author' => AuthorController::class
+]);
