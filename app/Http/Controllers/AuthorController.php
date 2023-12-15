@@ -52,7 +52,7 @@ class AuthorController extends Controller
 
             $url_key = strtolower(str_replace(' ', '-',$url_key));
 
-            if (Author::where('url_key', $url_key)->first()->count()) {
+            if (Author::where('url_key', $url_key)->first()) {
                 return response()->json(
                     [
                         'status' => false,
