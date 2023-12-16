@@ -17,7 +17,7 @@ class AuthorController extends Controller
         return response()->json(
             [
                 'status' => true,
-                'data' => Author::all()
+                'data' => Author::with('genres:genre_id,name')->get()
             ]
         );
     }
@@ -62,12 +62,19 @@ class AuthorController extends Controller
                 );
             }
 
-            Author::create(
+            $author = Author::create(
                 [
                     'name' => $request->get('name'),
                     'url_key' => $url_key
                 ]
             );
+
+            $genreIds = $request->get('genres');
+            if ($genreIds) {
+                foreach ($genreIds as $genreId) {
+                    $author->genres()->attach(intval($genreId));
+                }
+            }
 
             return response()->json([
                 'status' => true,
@@ -90,7 +97,7 @@ class AuthorController extends Controller
     public function show(string $id)
     {
         try {
-            $author = Author::findOrFail($id);
+            $author = Author::with('genres:genre_id,name')->findOrFail($id);
             return response()->json(
                 [
                     'status' => true,
@@ -168,13 +175,20 @@ class AuthorController extends Controller
         try {
             $author = Author::findOrFail($id);
 
-            $author->name = $request->get('name');
+            if ($request->get('name')) {
+                $author->name = $request->get('name');
+            }
             $url_key = $request->get('url_key');
             if ($url_key) {
                 $url_key = strtolower(str_replace(' ', '-',$url_key));
                 $author->url_key = $url_key;
             }
             $author->save();
+            $genreIds = $request->get('genres');
+            if ($genreIds) {
+                $author->genres()->detach();
+                $author->genres()->attach($genreIds);
+            }
 
             return response()->json([
                 'status' => true,

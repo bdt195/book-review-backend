@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Author extends Model
@@ -16,4 +17,17 @@ class Author extends Model
         'name',
         'url_key'
     ];
+
+    /**
+     * The genres that belong to the author.
+     */
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Genre::class,
+            'authors_genres',
+            'author_id',
+            'genre_id'
+        );
+    }
 }
