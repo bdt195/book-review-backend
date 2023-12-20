@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\BookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,10 +26,12 @@ Route::get('/user/profile', [UserController::class, 'getProfile'])->middleware('
 Route::resources(
     [
         'author' => AuthorController::class,
-        'genre' => GenreController::class
+        'genre' => GenreController::class,
+        'book' => BookController::class
     ],
     ['except' => ['create', 'edit']]
 );
 
 Route::get('/author/url_key/{url_key}', [AuthorController::class, 'showByUrlKey'])->name('author.showByUrlKey');
 Route::get('/genre/url_key/{url_key}', [GenreController::class, 'showByUrlKey'])->name('genre.showByUrlKey');
+Route::get('/book/url_key/{url_key}', [BookController::class, 'showByUrlKey'])->name('book.showByUrlKey');
