@@ -186,8 +186,7 @@ class AuthorController extends Controller
             $author->save();
             $genreIds = $request->get('genres');
             if ($genreIds) {
-                $author->genres()->detach();
-                $author->genres()->attach($genreIds);
+                $author->genres()->sync($genreIds);
             }
 
             return response()->json([
