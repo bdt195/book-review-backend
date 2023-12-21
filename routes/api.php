@@ -28,7 +28,7 @@ Route::resources(
     [
         'author' => AuthorController::class,
         'genre' => GenreController::class,
-        'book' => BookController::class
+        'book' => BookController::class,
         'publisher' => PublisherController::class
     ],
     ['except' => ['create', 'edit']]

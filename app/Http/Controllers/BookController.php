@@ -31,8 +31,7 @@ class BookController extends Controller
             $validateBook = Validator::make(
                 $request->all(),
                 [
-                    'title' => 'required',
-                    'isbn' => 'required'
+                    'title' => 'required'
                 ]
             );
 
@@ -64,10 +63,16 @@ class BookController extends Controller
             }
 
             $bookData = [
-                'title' => $request->get('title'),
-                'isbn' => $request->get('isbn')
+                'title' => $request->get('title')
             ];
 
+
+            if ($request->get('title_complete')) {
+                $bookData['title_complete'] = $request->get('title_complete');
+            }
+            if ($request->get('isbn')) {
+                $bookData['isbn'] = $request->get('isbn');
+            }
             if ($request->get('publisher_id')) {
                 $bookData['publisher_id'] = $request->get('publisher_id');
             }
@@ -99,6 +104,13 @@ class BookController extends Controller
                 }
             }
 
+            $authorIds = $request->get('authors');
+            if ($authorIds) {
+                foreach ($authorIds as $authorId) {
+                    $book->authors()->attach(intval($authorId));
+                }
+            }
+
             return response()->json([
                 'status' => true,
                 'message' => 'Book Created Successfully'
@@ -121,6 +133,10 @@ class BookController extends Controller
     {
         try {
             $book = Book::with('genres:genre_id,name')->findOrFail($id);
+            $book = Book::with('genres:genre_id,name')
+                ->with('authors:author_id,name')
+                ->findOrFail($id);
+
             return response()->json(
                 [
                     'status' => true,
@@ -202,6 +218,14 @@ class BookController extends Controller
                 $book->name = $request->get('title');
             }
 
+            if ($request->get('title_complete')) {
+                $book->title_complete = $request->get('title_complete');
+            }
+
+            if ($request->get('isbn')) {
+                $book->isbn = $request->get('isbn');
+            }
+
             $url_key = $request->get('url_key');
             if ($url_key) {
                 $url_key = strtolower(str_replace(' ', '-',$url_key));
@@ -231,6 +255,11 @@ class BookController extends Controller
             $genreIds = $request->get('genres');
             if ($genreIds) {
                 $book->genres()->sync($genreIds);
+            }
+
+            $authorIds = $request->get('authors');
+            if ($authorIds) {
+                $book->genres()->sync($authorIds);
             }
 
             return response()->json([
