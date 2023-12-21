@@ -18,6 +18,8 @@ class Author extends Model
         'url_key'
     ];
 
+    protected $hidden = ['pivot'];
+
     /**
      * The genres that belong to the author.
      */
