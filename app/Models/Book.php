@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -49,6 +50,18 @@ class Book extends Model
             'books_authors',
             'book_id',
             'author_id'
+        );
+    }
+
+    /**
+     * The publisher of the book.
+     */
+    public function publisher(): BelongsTo
+    {
+        return $this->belongsTo(
+            Publisher::class,
+            'publisher_id',
+            'publisher_id'
         );
     }
 }

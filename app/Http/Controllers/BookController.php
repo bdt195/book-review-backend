@@ -132,9 +132,9 @@ class BookController extends Controller
     public function show(string $id)
     {
         try {
-            $book = Book::with('genres:genre_id,name')->findOrFail($id);
             $book = Book::with('genres:genre_id,name')
                 ->with('authors:author_id,name')
+                ->with('publisher:publisher_id,name')
                 ->findOrFail($id);
 
             return response()->json(
