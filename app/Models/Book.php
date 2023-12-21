@@ -37,4 +37,17 @@ class Book extends Model
             'genre_id'
         );
     }
+
+    /**
+     * The authors of the book.
+     */
+    public function authors(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Author::class,
+            'books_authors',
+            'book_id',
+            'author_id'
+        );
+    }
 }
