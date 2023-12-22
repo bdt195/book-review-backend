@@ -12,12 +12,16 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(Request $request): \Illuminate\Http\JsonResponse
     {
+        $limit = $request->query('limit', 10);
+        $books = Book::with('genres:genre_id,name')->orderBy('book_id');
+        $books->paginate($limit);
+
         return response()->json(
             [
                 'status' => true,
-                'data' => Book::with('genres:genre_id,name')->get()
+                'data' => $books->get()
             ]
         );
     }

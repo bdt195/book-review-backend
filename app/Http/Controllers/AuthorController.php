@@ -12,12 +12,16 @@ class AuthorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Illuminate\Http\JsonResponse
+    public function index(Request $request): \Illuminate\Http\JsonResponse
     {
+        $limit = $request->query('limit', 10);
+        $authors = Author::with('genres:genre_id,name');
+        $authors->paginate($limit);
+
         return response()->json(
             [
                 'status' => true,
-                'data' => Author::with('genres:genre_id,name')->get()
+                'data' => $authors->get()
             ]
         );
     }
